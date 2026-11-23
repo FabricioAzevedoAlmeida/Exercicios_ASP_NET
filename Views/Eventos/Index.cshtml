@@ -1,0 +1,28 @@
+@model List<Evento>
+
+<h2>Lista de Eventos</h2>
+<p><a asp-action="Criar" class="btn btn-success">Novo Evento</a></p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Local</th>
+            <th>Data</th>
+            <th>Vagas</th>
+            <th>Ingresso</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Nome</td>
+                <td>@item.Local</td>
+                <td>@item.DataEvento.ToString("dd/MM/yyyy")</td>
+                <td>@item.QuantidadeVagas</td>
+                <td>@item.ValorIngresso.ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+</table>
