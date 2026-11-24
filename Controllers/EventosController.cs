@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ExerciciosASPNET.Models;
+using ExerciciosASPNET.ViewModels;
 
 namespace ExerciciosASPNET.Controllers
 {
@@ -60,6 +61,51 @@ namespace ExerciciosASPNET.Controllers
 
             return RedirectToAction("Index");
         }
+         [HttpGet]
+        public IActionResult Buscar()
+        {
+            var viewModel = new BuscaEventoViewModel
+            {
+                Resultados = _evento
+            };
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Buscar(BuscaEventoViewModel model)
+        {
+
+             var query = _evento.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(model.NomeBusca))
+            {
+                query = query.Where(e => e.Nome != null && 
+                    e.Nome.Contains(model.NomeBusca, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.LocalBusca))
+            {
+                query = query.Where(e => e.Local != null && 
+                    e.Local.Contains(model.LocalBusca, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (model.DataInicial.HasValue)
+            {
+                query = query.Where(e => e.DataEvento.Date >= model.DataInicial.Value.Date);
+            }
+            
+            if (!string.IsNullOrWhiteSpace(model.NomeBusca))
+            {
+                query = query.Where(e => e.Nome != null && 
+                    e.Nome.Contains(model.NomeBusca, StringComparison.OrdinalIgnoreCase));
+            }
+
+            model.Resultados = query.ToList();
+
+            return View(model);
+        }
+
+        
 
     }
 }
